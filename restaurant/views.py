@@ -7,6 +7,7 @@ from .models import Booking
 from datetime import datetime
 import json
 from .forms import BookingForm
+from django.http import JsonResponse
 
 def home(request):
     return render(request, 'index.html')
@@ -25,11 +26,17 @@ def book(request):
 
 # Add code for the bookings() view
 def bookings(request):
-    date = request.GET.get('date', datetime.today().date())
-    bookings = Booking.objects.all()
-    booking_json = serializers.serialize('json', bookings)
-    context = {'bookings': booking_json}
-    return render(request, 'bookings.html', context)
+    date = request.GET.get('date')
+
+    if date:
+        # bookings = Booking.objects.filter(reservation_date=datetime.today().date())
+        bookings = Booking.objects.all()
+        return JsonResponse({ cok: 'asu'})
+    else:
+        bookings = Booking.objects.all()
+        booking_json = serializers.serialize('json', bookings)
+        context = {'bookings': booking_json}
+        return render(request, 'bookings.html', context)
 
 
 def menu(request):
